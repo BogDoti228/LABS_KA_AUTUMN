@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace LAB_2
@@ -80,14 +81,15 @@ namespace LAB_2
 
         private void GetInput()
         {
-            var firstLineArr = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
+            var fileInput = new StreamReader("in.txt");
+            var firstLineArr = fileInput.ReadLine().Split(" ").Select(int.Parse).ToArray();
             xLength = firstLineArr[0];
             yLength = firstLineArr[1];
             var edges = new List<Edge>();
 
             for (var i = 1; i <= xLength; i++)
             {
-                var nextLineArr = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
+                var nextLineArr = fileInput.ReadLine().Split(" ").Select(int.Parse).ToArray();
                 for (var j = 1; j <= yLength; j++)
                 {
                     if (nextLineArr[j - 1] == 1)
@@ -157,6 +159,7 @@ namespace LAB_2
 
         private void SetOutput()
         {
+            using var fileOutput = new StreamWriter("out.txt");
             var sortedMaxPairs = maxPairsEdge.OrderBy(x => x.SecondNode).ToDictionary(edge => edge.SecondNode, edge => edge.FirstNode);
             var finalArray = new int[xLength];
             for (var i = 0; i < xLength; i++)
@@ -168,7 +171,7 @@ namespace LAB_2
                     finalArray[i] = 0;
                 }
             }
-            Console.WriteLine(string.Join(" ", finalArray));
+            fileOutput.WriteLine(string.Join(" ", finalArray));
         }
 
         private void AddSTNodes()

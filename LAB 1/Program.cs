@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace LAB_1
@@ -56,9 +57,10 @@ namespace LAB_1
         
         private IEnumerable<Edge> GetInput()
         {
-            var n = int.Parse(Console.ReadLine());
+            var fileInput = new StreamReader("in.txt");
+            var n = int.Parse(fileInput.ReadLine());
             IEnumerable<int> arrayChanged = Array.Empty<int>();
-            while (Console.ReadLine() is var nextString)
+            while (fileInput.ReadLine() is var nextString)
             {
                 arrayChanged = arrayChanged.Concat(nextString.Split().Select(int.Parse));
                 if (nextString.Contains("32767"))
@@ -140,12 +142,13 @@ namespace LAB_1
 
         private void SetOutput()
         {
+            using var fileOutput = new StreamWriter("out.txt");
             foreach (var nextListNodes in nodes.Select(node => (from edge in finalListEdges where edge.Contains(node) select edge.GetAnotherNode(node)).ToList()))
             {
-                Console.WriteLine(string.Join(" ", nextListNodes));
+                fileOutput.WriteLine(string.Join(" ", nextListNodes));
             }
 
-            Console.WriteLine(finalListEdges.Aggregate(0, (i, edge) => i + edge.Cost));
+            fileOutput.WriteLine(finalListEdges.Aggregate(0, (i, edge) => i + edge.Cost));
         }
 
         public void Start()
